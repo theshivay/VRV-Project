@@ -1,43 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Logs</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Logs</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="container">
-    <h2>Admin Activity Logs</h2>
-    <div id="logs"></div>
-    <button id="logout">Logout</button>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('You must log in first!');
-        window.location.href = 'login.html';
-        return;
-      }
+    <div class="container">
+        <h2>Admin Activity Logs</h2>
+        <div id="logs"></div>
+        <button id="logout">Logout</button>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:5000/api/auth/logs', {
-        headers: { Authorization: token },
-      });
+            if (!token) {
+                alert('You must log in as an admin first!');
+                window.location.href = 'login.html';
+                return;
+            }
 
-      const logs = await response.json();
-      const logsDiv = document.getElementById('logs');
-      logs.forEach((log) => {
-        const logItem = document.createElement('p');
-        logItem.textContent = `${log.timestamp}: ${log.action}`;
-        logsDiv.appendChild(logItem);
-      });
+            try {
+                const response = await fetch('http://localhost:5500/api/auth/logs', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`, // Attach the token
+                    },
+                });
 
-      document.getElementById('logout').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = 'index.html';
-      });
-    });
-  </script>
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error fetching logs:', errorData);
+                    alert(errorData.message || 'Failed to fetch logs.');
+                    return;
+                }
+
+                const logs = await response.json();
+
+                // Display logs on the page
+                const logsContainer = document.getElementById('logs-container');
+                logs.forEach((log) => {
+                    const logElement = document.createElement('div');
+                    logElement.innerHTML = `
+        <p><strong>Admin:</strong> ${log.adminId?.email || 'Unknown'}</p>
+        <p><strong>Action:</strong> ${log.action}</p>
+        <p><strong>Date:</strong> ${new Date(log.timestamp).toLocaleString()}</p>
+        <hr>
+      `;
+                    logsContainer.appendChild(logElement);
+                });
+            } catch (err) {
+                console.error('Error fetching logs:', err);
+                alert('Error fetching logs. Please try again.');
+            }
+
+            // Logout button
+            document.getElementById('logout').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = 'index.html';
+            });
+        });
+
+    </script>
 </body>
+
 </html>

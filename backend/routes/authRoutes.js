@@ -25,6 +25,26 @@ router.get('/admin-action', authenticate, authorize(['admin']), async (req, res)
     res.json({ message: 'Action logged successfully' });
   });
 
+  router.get('/me', authenticate, async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).select('-password'); // Exclude password
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+  router.get('/logs', authenticate, authorize(['admin']), async (req, res) => {
+    try {
+      const logs = await AuditLog.find().populate('adminId', 'email'); // Assuming 'AuditLog' is your model
+      res.json(logs);
+    } catch (err) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+      
+  
+
 
 
 module.exports = router;

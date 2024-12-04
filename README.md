@@ -20,5 +20,5 @@ A secure authentication and Role-Based Access Control (RBAC) system built using:
 ## Installation
 1. Clone the repository.
    ```bash
-   git clone https://github.com/your-repo/auth-rbac-system.git
-   cd auth-rbac-system
+   git clone https://github.com/theshivay/VRV-Project.git
+   cd VRV-Project

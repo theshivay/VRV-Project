@@ -13,31 +13,63 @@
     <button id="logout">Logout</button>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        alert('You must log in first!');
-        window.location.href = 'login.html';
-        return;
-      }
-
-      fetch('http://localhost:5000/api/auth/admin', {
-        headers: { Authorization: token },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById('welcome-message').textContent = `Welcome, ${data.message}`;
-        })
-        .catch(() => {
-          alert('Access denied!');
+    document.addEventListener('DOMContentLoaded', async () => {
+        const token = localStorage.getItem('token');
+      
+        if (!token) {
+          alert('You must log in first!');
+          window.location.href = 'login.html';
+          return;
+        }
+      
+        try {
+          // Fetch user details
+          const response = await fetch('http://localhost:5500/api/auth/me', {
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach the token
+            },
+          });
+      
+          if (!response.ok) {
+            const error = await response.json();
+            alert(error.message || 'Failed to fetch user details.');
+            return;
+          }
+      
+          const user = await response.json();
+      
+          // Display welcome message
+          const welcomeMessage = document.getElementById('welcome-message');
+          welcomeMessage.textContent = `Welcome, ${user.name || 'User'}!`;
+      
+          // Display role-specific content
+          const roleSpecificContent = document.getElementById('role-specific-content');
+          if (user.role === 'admin') {
+            roleSpecificContent.innerHTML = `
+              <p>You are an Admin. You have full access to manage the system.</p>
+              <a href="admin-logs.html">View Admin Logs</a>
+            `;
+          } else if (user.role === 'moderator') {
+            roleSpecificContent.innerHTML = `
+              <p>You are a Moderator. You can moderate user content.</p>
+            `;
+          } else {
+            roleSpecificContent.innerHTML = `
+              <p>You are a regular User. Enjoy exploring the platform.</p>
+            `;
+          }
+        } catch (err) {
+          console.error('Error fetching user details:', err);
+          alert('Error fetching user details. Please check the console for more details.');
+        }
+      
+        // Logout functionality
+        document.getElementById('logout').addEventListener('click', () => {
+          localStorage.removeItem('token');
           window.location.href = 'login.html';
         });
-
-      document.getElementById('logout').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = 'index.html';
       });
-    });
+      
   </script>
 </body>
 </html>

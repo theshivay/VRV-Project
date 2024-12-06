@@ -53,9 +53,9 @@ A secure **Authentication and Role-Based Access Control (RBAC)** system built wi
 
 ---
 
-## Folder Structure
+<!-- ## Folder Structure -->
 
-```
+<!-- ```
 ├── public
 │   ├── css
 │   │   └── styles.css      # Frontend styles
@@ -77,7 +77,7 @@ A secure **Authentication and Role-Based Access Control (RBAC)** system built wi
 ├── .env                    # Environment variables
 ├── package.json            # Project dependencies
 └── README.md               # Documentation
-```
+``` -->
 
 ---
 
@@ -112,8 +112,8 @@ A secure **Authentication and Role-Based Access Control (RBAC)** system built wi
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-repo/auth-rbac.git
-   cd auth-rbac
+   git clone https://github.com/theshivay/VRV-Project.git
+   cd VRV-Project
    ```
 
 2. **Install Dependencies**:
@@ -123,7 +123,7 @@ A secure **Authentication and Role-Based Access Control (RBAC)** system built wi
 
 3. **Environment Variables**: Create a `.env` file in the root directory and add:
    ```env
-   PORT=5000
+   PORT=5500
    MONGO_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret
    ```
@@ -132,10 +132,10 @@ A secure **Authentication and Role-Based Access Control (RBAC)** system built wi
    ```bash
    npm run dev
    ```
-   The server will run on http://localhost:5000.
+   The server will run on http://localhost:5500.
 
 5. **Open Frontend**:
-   Open any HTML file (e.g., login.html, admin-logs.html) in a browser.
+   Open any HTML file (e.g., login.html, dashboard.html) in a browser.
 
 ## Usage
 

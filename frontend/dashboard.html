@@ -21,7 +21,7 @@
         return;
       }
 
-      fetch('http://localhost:5500/api/auth/admin', {
+      fetch('https://vrv-project.onrender.com/api/auth/admin', {
         headers: { Authorization: token },
       })
         .then((response) => response.json())

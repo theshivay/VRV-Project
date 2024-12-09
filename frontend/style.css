@@ -13,13 +13,13 @@ body {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 400px;
   color: black;
   text-align: center;
 }
 
 input, button {
-  width: 100%;
+  width: 90%;
   margin: 10px 0;
   padding: 10px;
 }
